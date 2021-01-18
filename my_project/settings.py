@@ -133,7 +133,8 @@ CORS_ORIGIN_WHITELIST = [
     "http://api:8008",
     "http://api",
     "http://127.0.0.1:8800",
-    "http://localhost:8800"
+    "http://localhost:8800",
+    "http://localhost:8080"
 ]
 
 REST_FRAMEWORK = {
