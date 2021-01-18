@@ -207,10 +207,7 @@ export default {
           : await AuthService.signup(this.user)
         // console.log('authData', authData)
         if (authData.status === 200) {
-          this.$router.push('www.google.com')
-        }
-        if (authData.status === 201) {
-          this.$router.push('www.google.com')
+          this.$router.push(this.$route.query.redirect || '/dashboard')
         }
       } catch (error) {
         // console.log('Erro ao tentar fazer login: ', error)

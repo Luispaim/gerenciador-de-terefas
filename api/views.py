@@ -6,10 +6,12 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework import permissions
-from rest_framework.decorators import api_view, renderer_classes, permission_classes, authentication_classes
+from rest_framework.decorators import api_view, permission_classes, authentication_classes
 
-from django.contrib.sites.shortcuts import get_current_site
-from django.utils import timezone
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from rest_framework_simplejwt.tokens import AccessToken
+
+from django.shortcuts import render
 
 from tasks.models import Task
 from users.models import CustomUser
@@ -50,8 +52,9 @@ class TaskDeleteView(generics.DestroyAPIView):
 
 class RegisterView(generics.CreateAPIView):
     queryset = CustomUser.objects.all()
-    permission_classes = (AllowAny,)
     serializer_class = RegisterSerializer
+    authentication_classes = []
+    permission_classes = [permissions.AllowAny]
 
 
 class ChangePasswordView(APIView):

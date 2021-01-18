@@ -2,6 +2,23 @@ import axios from 'axios'
 import config from './config/config'
 import { camelizeKeys, decamelizeKeys } from 'humps'
 
+// token
+const AUTH_TOKEN = 'token-access'
+
+// salvando o token no localstorage
+const onLogin = async (token) => {
+  if (typeof window.localStorage !== 'undefined' && token) {
+    window.localStorage.setItem(AUTH_TOKEN, token)
+  }
+}
+
+// removendo o token do localstorage
+const onLogout = async apollo => {
+  if (typeof window.localStorage !== 'undefined') {
+    window.localStorage.removeItem(AUTH_TOKEN)
+  }
+}
+
 const instance = axios.create({})
 
 instance.defaults.baseURL = config.apiURL
@@ -21,18 +38,9 @@ instance.interceptors.request.use(config => {
     config.data = decamelizeKeys(config.data)
   }
 
-  config.headers.common['Authorization'] = `JWT token_jwt`
-  config.headers.put['Meu-Cabecalho'] = 'Curso VueJS'
+  config.headers.common['Authorization'] = `JWT ${window.localStorage.getItem(AUTH_TOKEN)}`
 
   return config
-
-  /* return new Promise((resolve, reject) => {
-        console.log('Fazendo requisição aguardar...')
-        setTimeout(() => {
-            console.log('Enviando requisição...')
-            resolve(config)
-        }, 2000)
-    }) */
 }, error => {
   console.log('Erro ao fazer requisição: ', error)
   return Promise.reject(error)
@@ -56,3 +64,9 @@ instance.interceptors.response.use(response => {
 })
 
 export default instance
+
+export {
+  AUTH_TOKEN,
+  onLogin,
+  onLogout
+}
